@@ -58,7 +58,6 @@ The canonical, always-current documentation index lives at the docs site below. 
 ## Operations
 
 - [Configuration](https://headroom-docs.vercel.app/docs/configuration): Env vars, config file, per-call overrides.
-- [Savings tracking](https://headroom-docs.vercel.app/docs/savings): `headroom savings` — durable cost-avoided + Today/7d/all-time and per-model/client/repo, from an append-only ledger that survives restarts.
 - [Benchmarks](https://headroom-docs.vercel.app/docs/benchmarks): Token-savings numbers across content types.
 - [Troubleshooting](https://headroom-docs.vercel.app/docs/troubleshooting): Common failure modes and fixes.
 - [Limitations](https://headroom-docs.vercel.app/docs/limitations): What Headroom won't do well today.
