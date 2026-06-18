@@ -671,7 +671,6 @@ class PrometheusMetrics:
                     tokens_before=input_tokens,
                     tokens_after=max(input_tokens - tokens_saved, 0),
                     model=model,
-                    repo=project,
                     client=client or "proxy",
                     source="proxy",
                 )
