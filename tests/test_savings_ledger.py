@@ -231,6 +231,7 @@ def test_proxy_record_request_appends_ledger_event(tmp_path, monkeypatch):
     config = ProxyConfig(cache_enabled=False, rate_limit_enabled=False, log_requests=False)
     with TestClient(create_app(config)) as client:
         proxy = client.app.state.proxy
+        # identified harness -> recorded as that client
         asyncio.run(
             proxy.metrics.record_request(
                 provider="openai",
@@ -239,10 +240,24 @@ def test_proxy_record_request_appends_ledger_event(tmp_path, monkeypatch):
                 output_tokens=24,
                 tokens_saved=40,
                 latency_ms=15.0,
+                client="claude-code",
+            )
+        )
+        # unidentified harness -> falls back to "proxy"
+        asyncio.run(
+            proxy.metrics.record_request(
+                provider="openai",
+                model="gpt-4o",
+                input_tokens=80,
+                output_tokens=10,
+                tokens_saved=20,
+                latency_ms=15.0,
             )
         )
 
     report = L.aggregate_savings()
-    assert report.lifetime["tokens_saved"] == 40
-    assert any(row["client"] == "proxy" for row in report.by_client)
+    assert report.lifetime["tokens_saved"] == 60
+    clients = {row["client"] for row in report.by_client}
+    assert "claude-code" in clients
+    assert "proxy" in clients
     assert any(row["model"] == "gpt-4o" for row in report.by_model)
